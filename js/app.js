@@ -15,14 +15,27 @@
  let matchedCards = [];
 
  // Creating Cards 
- for(let i = 0; i < cardList.length; i++)
+ function initial()
  {
-     const card = document.createElement("li");
-     card.classList.add("card");
-     card.innerHTML = `<i class="${cardList[i]}"></i>`;
-     cardContainer.appendChild(card);
+     
+    for(let i = 0; i < cardList.length; i++)
+    {
+        const card = document.createElement("li");
+        card.classList.add("card");
+        card.innerHTML = `<i class="${cardList[i]}"></i>`;
+        cardContainer.appendChild(card);
 
-     //Card Click Event
+        //Card Click Event Call
+        click(card);
+
+    }
+ }
+
+ /* 
+ * Function for Card Click 
+ */
+
+ function click(card){
     card.addEventListener('click',function(){
 
         const currentCard = this;
@@ -32,41 +45,54 @@
         {
 
             
-            card.classList.add("open","show");
+            card.classList.add("open","show","disable");
             openCards.push(this);
 
             //Attempt to Compare the Open Cards 
-            if(currentCard.innerHTML === previousCard.innerHTML){
-                
-                currentCard.classList.add("match");
-                previousCard.classList.add("match");
-                matchedCards.push(currentCard,previousCard);
-
-                openCards = [];
-
-                //Checking if the game has ended 
-                isOver();
-            }
-            else{
-
-                currentCard.classList.remove("open","show");
-                previousCard.classList.remove("open","show");
-
-                openCards = [];
-            }
+            compare(currentCard, previousCard);
         }
         else
         {
             //Incase there is no existing card open 
-            currentCard.classList.add("open","show");
+            currentCard.classList.add("open","show","disable");
             openCards.push(this);
 
         }
         
     });
-
  }
 
+ //Function to Compare 2 Cards 
+ function compare(currentCard, previousCard) {
+
+    //Matching of Cards
+    if(currentCard.innerHTML === previousCard.innerHTML){
+                
+        currentCard.classList.add("match");
+        previousCard.classList.add("match");
+        matchedCards.push(currentCard,previousCard);
+
+        openCards = [];
+
+        //Checking if the game has ended 
+        isOver();
+    }
+    else{
+
+        
+        //TImer set to 300 miliseconds
+        setTimeout(function() {
+            currentCard.classList.remove("open","show","disable");
+            previousCard.classList.remove("open","show","disable");
+            openCards = [];
+        },300);    
+    }
+
+    //Addition of New Move
+    addMoves();
+ }
+
+ //Check if the Game is Over 
  function isOver()
  {
         if(matchedCards.length === cardList.length)
@@ -75,14 +101,53 @@
         }
  }
 
-/*
- * Display the cards on the page
- *   - shuffle the list of cards using the provided "shuffle" method below
- *   - loop through each card and create its HTML
- *   - add each card's HTML to the page
- */
+ //Move Counter
+ const moveContainer = document.querySelector(".moves");
+ let move = 0;
+ moveContainer.innerHTML = 0;
+ function addMoves(){
+    move++;
+    moveContainer.innerHTML = move;
 
-// Shuffle function from http://stackoverflow.com/a/2450976
+    //Set Rating 
+    rating();
+ }
+
+ //Rating 
+ const starsContainer = document.querySelector(".stars");
+ starsContainer.innerHTML = `<li><i class="fa fa-star"></i></li>
+ <li><i class="fa fa-star"></i></li><li><i class="fa fa-star"></i></li>`;
+ function rating()
+{   
+    if(move > 17 && move < 25)
+    {
+        starsContainer.innerHTML = `<li><i class="fa fa-star"></i></li>
+        <li><i class="fa fa-star"></i></li>`;
+    }
+    else if(move > 25)
+    {
+        starsContainer.innerHTML = `<li><i class="fa fa-star"></i></li>`;
+    }
+ }
+
+ //To reset or restart the game 
+ const restarter = document.querySelector(".restart");
+ restarter.addEventListener("click", function(){
+        //Delete All Cards
+        cardContainer.innerHTML = "";
+
+        //Create New Cards from Initial Function 
+        initial();
+
+        //Reset Variables
+        matchedCards = [];
+        move = 0;
+        moveContainer.innerHTML = move;
+        starsContainer.innerHTML = `<li><i class="fa fa-star"></i></li>
+        <li><i class="fa fa-star"></i></li><li><i class="fa fa-star"></i></li>`;
+
+ });
+ // Shuffle function from http://stackoverflow.com/a/2450976
 function shuffle(array) {
     var currentIndex = array.length, temporaryValue, randomIndex;
 
@@ -96,6 +161,19 @@ function shuffle(array) {
 
     return array;
 }
+
+
+ //First Time Run for Game
+ shuffle(cardList);
+ initial();
+
+/*
+ * Display the cards on the page
+ *   - shuffle the list of cards using the provided "shuffle" method below
+ *   - loop through each card and create its HTML
+ *   - add each card's HTML to the page
+ */
+
 
 
 /*
