@@ -7,14 +7,26 @@
  "fa fa-cube","fa fa-cube","fa fa-leaf","fa fa-leaf","fa fa-bicycle",
  "fa fa-bicycle","fa fa-bomb","fa fa-bomb"]; 
 
+ /*
+ * set up the event listener for a card. If a card is clicked:
+ *  - display the card's symbol (put this functionality in another function that you call from this one)
+ *  - add the card to a *list* of "open" cards (put this functionality in another function that you call from this one)
+ *  - if the list already has another card, check to see if the two cards match
+ *    + if the cards do match, lock the cards in the open position (put this functionality in another function that you call from this one)
+ *    + if the cards do not match, remove the cards from the list and hide the card's symbol (put this functionality in another function that you call from this one)
+ *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
+ *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
+ */
 
- //Creating a holder for cards 
+
+
+ //Creating a holder/container for cards 
  const cardContainer = document.querySelector(".deck");
 
  let openCards = [];
  let matchedCards = [];
 
- // Creating Cards 
+ // Creating Cards and Initial Function to start the Game  
  function initial()
  {
      
@@ -25,14 +37,14 @@
         card.innerHTML = `<i class="${cardList[i]}"></i>`;
         cardContainer.appendChild(card);
 
-        //Card Click Event Call
+        //Card Click Event Call(Main Even Call)
         click(card);
 
     }
  }
 
  /* 
- * Function for Card Click 
+ * Function for Handling the Click on a Card  
  */
 
  function click(card){
@@ -40,20 +52,19 @@
 
         const currentCard = this;
         const previousCard = openCards[0];
-        // Incase there is an existing card open 
+        // Check whether there is a open card  
         if( openCards.length === 1)
         {
 
-            
             card.classList.add("open","show","disable");
             openCards.push(this);
 
-            //Attempt to Compare the Open Cards 
+            //Function Call to compare the cards for Matching  
             compare(currentCard, previousCard);
         }
         else
         {
-            //Incase there is no existing card open 
+            //Check to see whether there is any card open and if not deal with the situation 
             currentCard.classList.add("open","show","disable");
             openCards.push(this);
 
@@ -74,13 +85,17 @@
 
         openCards = [];
 
-        //Checking if the game has ended 
-        isOver();
+        //Checking if the game has ended (Game Over Function)
+        setTimeout(function() {
+            if(matchedCards.length === cardList.length)
+            {
+                alert("Game Over");
+            }
+        },100);
     }
     else{
 
-        
-        //TImer set to 300 miliseconds
+        //TImer for Matching Animation set to 300 miliseconds
         setTimeout(function() {
             currentCard.classList.remove("open","show","disable");
             previousCard.classList.remove("open","show","disable");
@@ -88,18 +103,11 @@
         },300);    
     }
 
-    //Addition of New Move
+    //Addition of New Move(Move Counter Function)
     addMoves();
  }
 
- //Check if the Game is Over 
- function isOver()
- {
-        if(matchedCards.length === cardList.length)
-        {
-            alert("Game Over");
-        }
- }
+ 
 
  //Move Counter
  const moveContainer = document.querySelector(".moves");
@@ -113,7 +121,7 @@
     rating();
  }
 
- //Rating 
+ // For Rating the Peformance of the Player 
  const starsContainer = document.querySelector(".stars");
  starsContainer.innerHTML = `<li><i class="fa fa-star"></i></li>
  <li><i class="fa fa-star"></i></li><li><i class="fa fa-star"></i></li>`;
@@ -163,9 +171,7 @@ function shuffle(array) {
 }
 
 
- //First Time Run for Game
- shuffle(cardList);
- initial();
+ 
 
 /*
  * Display the cards on the page
@@ -173,16 +179,8 @@ function shuffle(array) {
  *   - loop through each card and create its HTML
  *   - add each card's HTML to the page
  */
+//First Time Run for Game
+shuffle(cardList);
+initial();
 
 
-
-/*
- * set up the event listener for a card. If a card is clicked:
- *  - display the card's symbol (put this functionality in another function that you call from this one)
- *  - add the card to a *list* of "open" cards (put this functionality in another function that you call from this one)
- *  - if the list already has another card, check to see if the two cards match
- *    + if the cards do match, lock the cards in the open position (put this functionality in another function that you call from this one)
- *    + if the cards do not match, remove the cards from the list and hide the card's symbol (put this functionality in another function that you call from this one)
- *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
- *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
- */
