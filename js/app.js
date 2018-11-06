@@ -25,11 +25,13 @@
 
  let openCards = [];
  let matchedCards = [];
+ let firstClick = true;
 
  // Creating Cards and Initial Function to start the Game  
  function initial()
  {
-     
+    
+    shuffle(cardList);
     for(let i = 0; i < cardList.length; i++)
     {
         const card = document.createElement("li");
@@ -43,6 +45,8 @@
     }
  }
 
+
+
  /* 
  * Function for Handling the Click on a Card  
  */
@@ -50,6 +54,13 @@
  function click(card){
     card.addEventListener('click',function(){
 
+        if(firstClick)
+        {
+            startTimer();
+            //Change the Value for Timer Execution
+            firstClick = false;
+        }
+        
         const currentCard = this;
         const previousCard = openCards[0];
         // Check whether there is a open card  
@@ -73,6 +84,9 @@
     });
  }
 
+
+
+
  //Function to Compare 2 Cards 
  function compare(currentCard, previousCard) {
 
@@ -85,11 +99,13 @@
 
         openCards = [];
 
-        //Checking if the game has ended (Game Over Function)
+        //Checking if the game has ended (Game Over Function) isOver Function inbuilt 
+
         setTimeout(function() {
             if(matchedCards.length === cardList.length)
             {
-                alert("Game Over");
+                //Stop the Timer 
+                stopTimer();
             }
         },100);
     }
@@ -107,7 +123,35 @@
     addMoves();
  }
 
- 
+
+
+//Timer
+
+const timeContainer = document.querySelector(".timer");
+let liveTime, totalSeconds = 0;
+
+timeContainer.innerHTML = totalSeconds + "s";
+
+function startTimer() {
+    liveTime = setInterval(function() {
+        totalSeconds++;
+        timeContainer.innerHTML = totalSeconds +'s';
+    },1000);
+}
+
+
+
+/*
+* We need a function to stop the Timer which is running
+* So we use stopTimer function to Stop the Timer 
+* Function will be called when the Game is Over
+*/
+
+function stopTimer() {
+    clearInterval(liveTime);
+}
+
+
 
  //Move Counter
  const moveContainer = document.querySelector(".moves");
@@ -121,8 +165,12 @@
     rating();
  }
 
- // For Rating the Peformance of the Player 
+
+
+ // For Rating the Peformance of the Player
+
  const starsContainer = document.querySelector(".stars");
+ let star = 0;
  starsContainer.innerHTML = `<li><i class="fa fa-star"></i></li>
  <li><i class="fa fa-star"></i></li><li><i class="fa fa-star"></i></li>`;
  function rating()
@@ -131,12 +179,16 @@
     {
         starsContainer.innerHTML = `<li><i class="fa fa-star"></i></li>
         <li><i class="fa fa-star"></i></li>`;
+        star = 2;
     }
     else if(move > 25)
     {
         starsContainer.innerHTML = `<li><i class="fa fa-star"></i></li>`;
+        star = 1;
     }
  }
+
+
 
  //To reset or restart the game 
  const restarter = document.querySelector(".restart");
@@ -155,7 +207,13 @@
         <li><i class="fa fa-star"></i></li><li><i class="fa fa-star"></i></li>`;
 
  });
+
+ 
+
+
+
  // Shuffle function from http://stackoverflow.com/a/2450976
+
 function shuffle(array) {
     var currentIndex = array.length, temporaryValue, randomIndex;
 
@@ -168,7 +226,7 @@ function shuffle(array) {
     }
 
     return array;
-}
+}	
 
 
  
@@ -180,7 +238,8 @@ function shuffle(array) {
  *   - add each card's HTML to the page
  */
 //First Time Run for Game
-shuffle(cardList);
+
+
 initial();
 
 
