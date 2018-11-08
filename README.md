@@ -8,6 +8,8 @@ Each player has to flip the card to find out about the picture behind it. We nee
 
 In case of any issues, try refreshing or resetting the game with the reset button. 
 
+Give it a Shot - https://shubhankarb180.github.io/project-memory-game/
+
 ## Dependencies 
 
   * jQuery 
