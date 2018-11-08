@@ -106,6 +106,7 @@
             {
                 //Stop the Timer 
                 stopTimer();
+                wining();
             }
         },100);
     }
@@ -201,17 +202,19 @@ function stopTimer() {
 
         //Reset Variables
         matchedCards = [];
+        firstClick = true;
         move = 0;
         moveContainer.innerHTML = move;
         starsContainer.innerHTML = `<li><i class="fa fa-star"></i></li>
         <li><i class="fa fa-star"></i></li><li><i class="fa fa-star"></i></li>`;
+        stopTimer();
+        totalSeconds = 0;
+        timeContainer.innerHTML = totalSeconds + "s";
+        
 
  });
 
  
-
-
-
  // Shuffle function from http://stackoverflow.com/a/2450976
 
 function shuffle(array) {
@@ -228,18 +231,45 @@ function shuffle(array) {
     return array;
 }	
 
-
- 
-
 /*
  * Display the cards on the page
  *   - shuffle the list of cards using the provided "shuffle" method below
  *   - loop through each card and create its HTML
  *   - add each card's HTML to the page
  */
+
+
 //First Time Run for Game
-
-
 initial();
+
+
+//Modal Definition using jQuery UI
+$("#dialog").dialog({
+    autoOpen:false,
+    modal: true,
+    height: "auto",
+    width: "auto",
+    buttons: {
+        Close: function() {
+        $(this).dialog( "close" );
+        },
+        Replay: function() {
+            restart();
+            $(this).dialog( "close");
+        }
+    },
+    open: function(){
+        document.querySelector('.modalHead').innerHTML = "Contratulations!! You Won"
+        document.querySelector('.show-moves').textContent = "You won by " + move + " moves.";
+        document.querySelector('.show-time').textContent = "Time took : " + totalSeconds + "s";
+        document.querySelector('.show-stars').textContent = "You got " + star + " stars.";
+    }
+});
+
+// Function to Create the Modal
+function wining(){
+clearInterval(liveTime);
+$("#dialog").dialog("open");
+}
 
 
