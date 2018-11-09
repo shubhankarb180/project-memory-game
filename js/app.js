@@ -202,6 +202,7 @@ function stopTimer() {
 
         //Reset Variables
         matchedCards = [];
+        openCards = [];
         firstClick = true;
         move = 0;
         moveContainer.innerHTML = move;
@@ -254,7 +255,23 @@ $("#dialog").dialog({
         $(this).dialog( "close" );
         },
         Replay: function() {
-            restart();
+            //Delete All Cards
+            cardContainer.innerHTML = "";
+
+            //Create New Cards from Initial Function 
+            initial();
+
+            //Reset Variables
+            matchedCards = [];
+            openCards = [];
+            firstClick = true;
+            move = 0;
+            moveContainer.innerHTML = move;
+            starsContainer.innerHTML = `<li><i class="fa fa-star"></i></li>
+            <li><i class="fa fa-star"></i></li><li><i class="fa fa-star"></i></li>`;
+            stopTimer();
+            totalSeconds = 0;
+            timeContainer.innerHTML = totalSeconds + "s";
             $(this).dialog( "close");
         }
     },
