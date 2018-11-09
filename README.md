@@ -16,4 +16,12 @@ Give it a Shot - https://shubhankarb180.github.io/project-memory-game/
   * Boootstrap 3 
   * Font Awesome
   
+## Screenshots
+
+![screenshot-1](img/Screenshot1.png)
+![screenshot-2](img/Screenshot2.png)
+![screenshot-3](img/Screenshot4.png)
+![screenshot-4](img/Screenshot3.png)
+
+
 # Play the Game and tell me ways to improve it!!
